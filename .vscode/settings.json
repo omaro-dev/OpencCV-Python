@@ -1,0 +1,8 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true,
+    "python.analysis.memory.keepLibraryAst": true,
+    "python.autoComplete.extraPaths": [
+        "C:/ProgramData/Anaconda3/Lib/site-packages/cv2/python-3.8"
+    ]
+}
