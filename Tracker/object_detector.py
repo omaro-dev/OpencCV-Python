@@ -61,8 +61,11 @@ while True:
     cv2.imshow("Mask", mask)
     cv2.imshow("roi", roi)
     
-    key = cv2.waitKey(25)
-    if key == 27:
+    # key = cv2.waitKey(25)
+    # if key == 27:
+    #     break
+    
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
 cap.release()
