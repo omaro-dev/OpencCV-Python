@@ -24,7 +24,10 @@ train_index = {}
 idx = 0
 
 for  label, image in zip(train_labels, train_images):
-    face_detection = face_detector(image, 1)
+    # Convert video from BGR to RGB channel ordering (which is what dlib expects)
+    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    face_detection = face_detector(rgb, 1)
     # For face recognition we need only one face, let's calculate the face area reported
     #
     if len(face_detection) < 1:
@@ -52,12 +55,12 @@ for  label, image in zip(train_labels, train_images):
         cv2.rectangle(image, (l, t), (r, b), (0, 0, 255), 2)
         cv2.putText(image, 'Name: ' + str(label), (10, 30), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0,255,0))
         
-        points = points_detector(image, face)
+        points = points_detector(rgb, face)
         # for point in points.parts():
         #     cv2.circle(image, (point.x, point.y), 2, (0, 255, 0), 1)
             
         # returns a dlib.vector with 128 values for each face
-        face_descriptor = face_descriptor_extractor.compute_face_descriptor(image, points)
+        face_descriptor = face_descriptor_extractor.compute_face_descriptor(rgb, points)
         #print(type(face_descriptor))
         #print(len(face_descriptor))
     
@@ -98,7 +101,10 @@ predictions = []
 expected_outputs = []
 
 for  id, image in zip(test_labels, test_images):
-    face_detection = face_detector(image, 1)
+    # Convert video from BGR to RGB channel ordering (which is what dlib expects)
+    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    
+    face_detection = face_detector(rgb, 1)
     
     if len(face_detection) < 1:
         print("WARN: face NOT found in test image")
@@ -119,8 +125,8 @@ for  id, image in zip(test_labels, test_images):
         if area < 11000:
             continue
                 
-        points = points_detector(image, face)
-        face_descriptor = face_descriptor_extractor.compute_face_descriptor(image, points)
+        points = points_detector(rgb, face)
+        face_descriptor = face_descriptor_extractor.compute_face_descriptor(rgb, points)
         face_descriptor_np = np.array(face_descriptor, dtype=np.float64)
         
         distances = np.linalg.norm(face_descriptor_np - descriptor_matrix, axis = 1)
